@@ -25,7 +25,7 @@ if (isset($_POST["submit"])) {
   <h1>Sign in</h1>
 
   <?php if (isset($error)) : ?>
-    <p style="color: red; font-style:italic;">username / password salah!</p>
+    <p style="color: red; font-style:italic;">username / password salah!!!</p>
   <?php endif; ?>
 
   <ul>
