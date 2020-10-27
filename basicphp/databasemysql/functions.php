@@ -13,3 +13,57 @@ function query($query)
   }
   return $rows;
 }
+
+function tambah($data)
+{
+  //ambil data dari tiap field dalam form
+  global $conn;
+
+  $nim = htmlspecialchars($data["nim"]);
+  $nama = htmlspecialchars($data["nama"]);
+  $email = htmlspecialchars($data["email"]);
+  $jurusan = htmlspecialchars($data["jurusan"]);
+  $gambar = htmlspecialchars($data["gambar"]);
+
+  //query insert data
+  $query = "INSERT INTO mahasiswa
+            VALUES
+            ('', '$nim','$nama', '$email', '$jurusan', '$gambar')";
+  mysqli_query($conn, $query);
+
+  return mysqli_affected_rows($conn);
+}
+
+function hapus($id)
+{
+  global $conn;
+  mysqli_query($conn, "DELETE FROM mahasiswa where id=$id");
+
+  return mysqli_affected_rows($conn);
+}
+
+function ubah($data)
+{
+  //ambil data dari tiap field dalam form
+  global $conn;
+  $id = $data["id"];
+  $nim = htmlspecialchars($data["nim"]);
+  $nama = htmlspecialchars($data["nama"]);
+  $email = htmlspecialchars($data["email"]);
+  $jurusan = htmlspecialchars($data["jurusan"]);
+  $gambar = htmlspecialchars($data["gambar"]);
+
+  //query insert data
+  $query = "UPDATE mahasiswa
+          SET
+          nim = '$nim',
+          nama = '$nama',
+          email = '$email',
+          jurusan = '$jurusan',
+          gambar = '$gambar'
+          WHERE id = $id
+          ";
+  mysqli_query($conn, $query);
+
+  return mysqli_affected_rows($conn);
+}
