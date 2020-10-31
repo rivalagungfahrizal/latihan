@@ -8,7 +8,21 @@ if (!isset($_SESSION["login"])) {
 
 require 'functions.php';
 
-$mahasiswa = query("SELECT * FROM mahasiswa");
+//pagination
+$jumlahDataPerhalaman = 2;
+$jumlahData = count(query("SELECT * FROM mahasiswa"));
+$jumlahHalaman = ceil($jumlahData / $jumlahDataPerhalaman);
+
+//cek apakah ada halaman di url
+if (isset($_GET["halaman"])) {
+  $currentPage = $_GET["halaman"];
+} else {
+  $currentPage = 1;
+}
+$awalData = ($jumlahDataPerhalaman * $currentPage) - $jumlahDataPerhalaman;
+
+
+$mahasiswa = query("SELECT * FROM mahasiswa LIMIT $awalData, $jumlahDataPerhalaman");
 
 //tombol cari ditekan
 if (isset($_POST["cari"])) {
@@ -57,6 +71,25 @@ if (isset($_POST["reset"])) {
     <button type="submit" name="reset">Reset</button>
 
   </form>
+  <br><br>
+
+  <!-- navigasi -->
+  <?php if ($currentPage > 1) : ?>
+    <a href="?halaman=<?= $currentPage - 1; ?>">&laquo;</a>
+  <?php endif; ?>
+
+  <?php for ($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+    <?php if ($i == $currentPage) : ?>
+      <a href="?halaman=<?= $i; ?>" style="font-weight: bold; color:red;"><?= $i; ?></a>
+    <?php else : ?>
+      <a href="?halaman=<?= $i; ?>"><?= $i; ?></a>
+    <?php endif; ?>
+  <?php endfor; ?>
+
+  <?php if ($currentPage < $jumlahHalaman) : ?>
+    <a href="?halaman=<?= $currentPage + 1; ?>">&raquo;</a>
+  <?php endif; ?>
+
   <br>
 
   <!-- form data -->
@@ -70,7 +103,7 @@ if (isset($_POST["reset"])) {
       <th>Email</th>
       <th>Jurusan</th>
     </tr>
-    <?php $i = 1; ?>
+    <?php $i = $awalData + 1; ?>
     <?php foreach ($mahasiswa as $row) : ?>
       <tr>
         <td><?= $i; ?></td>
